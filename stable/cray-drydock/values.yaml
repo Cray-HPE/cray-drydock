@@ -1,0 +1,30 @@
+# Default values for cray-drydock.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+imagesHost: "dtr.dev.cray.com"
+
+kubectl:
+  image:
+    repository: loftsman/loftsman
+    tag: 0.5.1
+
+sonar:
+  jobsWatcher:
+    namespaces:
+    - services
+    - nexus
+    - spire
+    - vault
+    schedule:
+      minute: "*/1"
+      hour: "*"
+      day_of_month: "*"
+      month: "*"
+      day_of_week: "*"
+  sync:
+    schedule:
+      minute: "*/1"
+      hour: "*"
+      day_of_month: "*"
+      month: "*"
+      day_of_week: "*"

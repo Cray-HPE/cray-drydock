@@ -1,0 +1,8 @@
+#
+# Copyright 2020 Hewlett Packard Enterprise Development LP
+#
+apiVersion: v1
+description: Foundational resources and baseline building-blocks for a Cray Kubernetes cluster
+name: cray-drydock
+home: "cloud/cray-charts"
+version: 2.6.1

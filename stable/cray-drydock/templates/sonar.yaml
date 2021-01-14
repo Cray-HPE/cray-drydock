@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sonar
+  namespace: services
+  labels:
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+data:
+  sonar-jobs-watcher.sh: |-
+{{ .Files.Get "files/sonar-jobs-watcher.sh" | indent 4 }}
+  sonar-sync.sh: |-
+{{ .Files.Get "files/sonar-sync.sh" | indent 4 }}
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: sonar-crb
+  labels:
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+subjects:
+- kind: ServiceAccount
+  name: sonar
+  namespace: services
+roleRef:
+  kind: ClusterRole
+  name: sonar-cr
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: services
+  name: sonar
+  labels:
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: sonar-cr
+  labels:
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+rules:
+- apiGroups: ["", "batch", "extensions"]
+  resources: ["jobs", "pods", "pods/log", "pods/exec", "configmaps", "secrets"]
+  verbs: ["get", "list", "create", "patch"]
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs: ["get", "list"]

@@ -1,0 +1,136 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nexus
+  labels:
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: operators
+  labels:
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: cpu-mem-limit-range
+  namespace: operators
+  labels:
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+spec:
+  limits:
+  - type: Container
+    defaultRequest:
+      cpu: "10m"
+      memory: "64Mi"
+    default:
+      cpu: "2"
+      memory: "2Gi"
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: services
+  labels:
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: cpu-mem-limit-range
+  namespace: services
+  labels:
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+spec:
+  limits:
+  - type: Container
+    defaultRequest:
+      cpu: "10m"
+      memory: "64Mi"
+    default:
+      cpu: "2"
+      memory: "2Gi"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    name: user
+  name: user
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    name: uas
+    istio-injection: enabled
+  name: uas
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: spire
+  labels:
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gatekeeper-system
+  labels:
+    admission.gatekeeper.sh/ignore: no-self-managing
+    control-plane: controller-manager
+    gatekeeper.sh/system: "yes"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pki-operator
+  labels:
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: cpu-mem-limit-range
+  namespace: pki-operator
+  labels:
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+spec:
+  limits:
+  - type: Container
+    defaultRequest:
+      cpu: "10m"
+      memory: "64Mi"
+    default:
+      cpu: "2"
+      memory: "2Gi"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vault
+  labels:
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: cpu-mem-limit-range
+  namespace: vault
+  labels:
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+spec:
+  limits:
+  - type: Container
+    defaultRequest:
+      cpu: "10m"
+      memory: "64Mi"
+    default:
+      cpu: "2"
+      memory: "2Gi"
