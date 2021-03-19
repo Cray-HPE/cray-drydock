@@ -10,17 +10,14 @@ kubectl:
 
 sonar:
   jobsWatcher:
+    image:
+      repository: cray/cray-sonar
+      # tag: latest
     namespaces:
     - services
     - nexus
     - spire
     - vault
-    schedule:
-      minute: "*/1"
-      hour: "*"
-      day_of_month: "*"
-      month: "*"
-      day_of_week: "*"
   sync:
     schedule:
       minute: "*/1"

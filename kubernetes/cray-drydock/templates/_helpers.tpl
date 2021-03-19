@@ -52,3 +52,16 @@ Get an image prefix
 {{- printf "" -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+The Cray build process fills in the Chart appVersion based on the image tag that it generated.
+This can be overridden by setting the image tag in values.yaml.
+If neither is set then `latest` is used.
+*/}}
+{{- define "cray-drydock.watcher-tag" -}}
+{{- if .Values.sonar.jobsWatcher.image.tag -}}
+{{- .Values.sonar.jobsWatcher.image.tag -}}
+{{- else -}}
+{{- .Chart.AppVersion | default "latest" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
