@@ -40,3 +40,8 @@ if kubectl get ns user &> /dev/null; then
 else
   echo "Didn't find the user namespace, not attempting to sync there"
 fi
+if kubectl get ns spire &> /dev/null; then
+  sync_item "secret/postgres-backup-s3-credentials" "default" "spire"
+else
+  echo "Didn't find the spire namespace, not attempting to sync there"
+fi
