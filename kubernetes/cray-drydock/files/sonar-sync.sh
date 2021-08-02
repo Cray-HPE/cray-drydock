@@ -45,3 +45,8 @@ if kubectl get ns spire &> /dev/null; then
 else
   echo "Didn't find the spire namespace, not attempting to sync there"
 fi
+if kubectl get ns nexus &> /dev/null; then
+  sync_item "configmap/cray-configmap-ca-public-key" "default" "nexus"
+else
+  echo "Didn't find the nexus namespace, not attempting to sync there"
+fi
