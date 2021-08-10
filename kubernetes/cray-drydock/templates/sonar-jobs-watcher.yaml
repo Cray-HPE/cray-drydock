@@ -35,13 +35,12 @@ spec:
         {{- range .Values.sonar.jobsWatcher.namespaces }}
         - {{ . | quote }}
         {{- end }}
+        {{- if .Values.sonar.jobsWatcher.resources }}
+        {{- with .Values.sonar.jobsWatcher.resources }}
         resources:
-          requests:
-            memory: "160Mi"
-            cpu: "500m"
-          limits:
-            memory: "320Mi"
-            cpu: "1500m"
+          {{- toYaml . | nindent 10 }}
+        {{- end -}}
+        {{- end }}
         volumeMounts:
           - name: sonar-scripts
             mountPath: /bin/sonar-jobs-watcher.sh
