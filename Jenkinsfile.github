@@ -1,0 +1,39 @@
+@Library('csm-shared-library') _
+
+pipeline {
+    agent {
+        label "metal-gcp-builder"
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: "10"))
+        timestamps()
+    }
+
+    environment {
+        DESCRIPTION = "Foundational setup for Cray Kubernetes deployment."
+        IS_STABLE = getBuildIsStable()
+        CHART_NAME = "cray-drydock"
+        CHART_VERSION = getChartVersion(name: env.CHART_NAME, isStable: env.IS_STABLE)
+    }
+
+    stages {
+        stage("Build") {
+            parallel {
+                stage("Chart") {
+                    steps {
+                        sh "make chart"
+                    }
+                }
+            }
+        }
+
+        stage("Publish") {
+            steps {
+                script {
+                    publishCsmHelmCharts(component: env.CHART_NAME, chartsPath: "${WORKSPACE}/kubernetes/.packaged", isStable: env.IS_STABLE)
+                }
+            }
+        }
+    }
+}

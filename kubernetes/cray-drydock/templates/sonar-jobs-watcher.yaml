@@ -1,0 +1,52 @@
+{{- /*
+Copyright 2020 Hewlett Packard Enterprise Development LP
+*/ -}}
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: sonar-jobs-watcher
+  namespace: services
+  labels:
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+spec:
+  {{ with .Values.sonar.jobsWatcher.schedule -}}
+    schedule: "{{.minute}} {{.hour}} {{.day_of_month}} {{.month}} {{.day_of_week}}"
+  {{- end }}
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            cronjob-name: sonar-jobs-watcher
+          annotations:
+            sidecar.istio.io/inject: "false"
+        spec:
+          restartPolicy: Never
+          serviceAccountName: sonar
+          containers:
+            - name: "sonar"
+              image: "{{ include "cray-drydock.image-prefix" .Values }}loftsman/docker-kubectl:latest"
+              command:
+              - "/bin/sonar-jobs-watcher.sh"
+              {{- range .Values.sonar.jobsWatcher.namespaces }}
+              - {{ . | quote }}
+              {{- end }}
+              resources:
+                requests:
+                  memory: "160Mi"
+                  cpu: "500m"
+                limits:
+                  memory: "320Mi"
+                  cpu: "1500m"
+              volumeMounts:
+                - name: sonar-scripts
+                  mountPath: /bin/sonar-jobs-watcher.sh
+                  readOnly: true
+                  subPath: sonar-jobs-watcher.sh
+          volumes:
+            - name: sonar-scripts
+              configMap:
+                defaultMode: 0700
+                name: sonar

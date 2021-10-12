@@ -1,0 +1,114 @@
+## jobs-watcher service account is a generic sa useful for InitContainers that
+## want to watch for state of Job and wait until the job is completed
+## jobs-watcher service account is available in "services" namespace
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: jobs-watcher-crb
+subjects:
+- kind: ServiceAccount
+  name: jobs-watcher
+  namespace: services
+roleRef:
+  kind: ClusterRole
+  name: jobs-watcher-cr
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: services
+  name: jobs-watcher
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: jobs-watcher-cr
+rules:
+- apiGroups: ["", "batch"]
+  resources: ["jobs"]
+  verbs: ["get", "list"]
+
+---
+# RoleBinding for PSP in loftsman namespace
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: loftsman-psp
+  namespace: loftsman
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: privileged-psp
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: system:serviceaccounts:loftsman
+---
+# RoleBinding for PSP in operators namespace
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: operators-psp
+  namespace: operators
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: privileged-psp
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: system:serviceaccounts:operators
+---
+# RoleBinding for PSP in istio-system namespace
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: istio-system-psp
+  namespace: istio-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: privileged-psp
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: system:serviceaccounts:istio-system
+---
+# RoleBinding for PSP with jobs-watcher ServiceAccount in services namespace
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: sonar-psp
+  namespace: services
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: privileged-psp
+subjects:
+- kind: ServiceAccount
+  name: sonar
+  namespace: services
+- kind: ServiceAccount
+  name: jobs-watcher
+  namespace: services
+---
+# Grants the default service account access to the default PSP for the services
+# namespace, effectively making the default PSP for the services namespace
+# privileged-psp.
+# The default PSP for the services namespace is privileged-psp because the
+# version of the strimzi operator that we're currently running requires it.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: services-default-psp
+  namespace: services
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: privileged-psp
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: services
