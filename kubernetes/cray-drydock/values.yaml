@@ -13,6 +13,13 @@ sonar:
     image:
       repository: cray/cray-sonar
       # tag: latest
+    resources:
+      requests:
+        memory: "160Mi"
+        cpu: "500m"
+      limits:
+        memory: "320Mi"
+        cpu: "8"
     namespaces:
     - services
     - nexus
