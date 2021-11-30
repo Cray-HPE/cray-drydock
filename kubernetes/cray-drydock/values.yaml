@@ -1,18 +1,18 @@
 # Default values for cray-drydock.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-imagesHost: "dtr.dev.cray.com"
 
 kubectl:
   image:
-    repository: loftsman/loftsman
-    tag: 0.5.1
+    repository: artifactory.algol60.net/csm-docker/stable/docker-kubectl
+    tag: 1.19.15
 
 sonar:
   jobsWatcher:
     image:
-      repository: cray/cray-sonar
-      # tag: latest
+      repository: artifactory.algol60.net/csm-docker/stable/cray-sonar
+      # tag defaults to chart appVersion
+      pullPolicy: IfNotPresent
     resources:
       requests:
         memory: "160Mi"

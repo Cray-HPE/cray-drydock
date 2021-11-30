@@ -1,0 +1,10 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.19.0
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+ SNYK-CC-K8S-47:
+    - '*':
+        reason: The sonar sync and sonar jobs watcher processes require these permissions.
+        expires: 2041-12-01T00:00:00.000Z
+        created: 2021-11-30T00:32:42.642Z
+patch: {}

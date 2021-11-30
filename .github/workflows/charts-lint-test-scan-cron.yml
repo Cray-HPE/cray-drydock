@@ -1,0 +1,17 @@
+name: Cron Lint, test, and scan Helm charts
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+jobs:
+  lint-test-scan:
+    uses: Cray-HPE/.github/.github/workflows/charts-lint-test-scan.yml@main
+    with:
+      ct-config: |
+        chart-dirs:
+          - kubernetes
+        validate-maintainers: false
+      scan-chart-snyk-args: "--severity-threshold=high --policy-path=kubernetes/.snyk"
+      scan-image-snyk-args: "--severity-threshold=high"
+    secrets:
+      snyk-token: ${{ secrets.SNYK_TOKEN }}
