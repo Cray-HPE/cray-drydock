@@ -11,6 +11,7 @@
 # as such due to the Istio sidecar which never exits. If it finds jobs in that state, Sonar
 # issues `crictl stop` to the Istio sidecar container to allow the Job to be marked as complete
 # For more information on the issue Sonar fixes, see https://github.com/istio/istio/issues/6324
+set -eou pipefail
 
 function get_containers() {
     kubectl get pods $1 -n $2 -o jsonpath='{range .status.containerStatuses[*]}{.name},{.state.running.startedAt}{.state.terminated.reason},{.restartCount},{.containerID}{"\n"}{end}'
