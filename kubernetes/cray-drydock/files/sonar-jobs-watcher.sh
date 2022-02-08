@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 #
 # Copyright 2020 Hewlett Packard Enterprise Development LP
 #

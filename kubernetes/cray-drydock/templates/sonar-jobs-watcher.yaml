@@ -48,7 +48,7 @@ spec:
             fieldRef:
               fieldPath: spec.nodeName
         - name: SCRIPT_VERSION
-          value: "1"
+          value: "2"
         command:
         - "/bin/sonar-jobs-watcher.sh"
         {{- range .Values.sonar.jobsWatcher.namespaces }}
