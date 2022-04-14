@@ -164,3 +164,28 @@ spec:
     default:
       cpu: "2"
       memory: "2Gi"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kyverno
+  labels:
+    name: kyverno
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: cpu-mem-limit-range
+  namespace: kyverno
+  labels:
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+spec:
+  limits:
+  - type: Container
+    defaultRequest:
+      cpu: "10m"
+      memory: "64Mi"
+    default:
+      cpu: "2"
+      memory: "2Gi"
