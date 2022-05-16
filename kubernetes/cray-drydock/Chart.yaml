@@ -23,7 +23,7 @@
 #
 apiVersion: v2
 name: cray-drydock
-version: 2.12.2
+version: 2.13.0
 description: Foundational resources and baseline building-blocks for a Cray Kubernetes
   cluster
 keywords:
