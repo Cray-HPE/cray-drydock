@@ -171,7 +171,6 @@ metadata:
   name: kyverno
   labels:
     name: kyverno
-    istio-injection: enabled
 ---
 apiVersion: v1
 kind: LimitRange
