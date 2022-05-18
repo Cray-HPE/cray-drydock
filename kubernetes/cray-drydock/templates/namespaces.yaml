@@ -188,3 +188,55 @@ spec:
     default:
       cpu: "2"
       memory: "2Gi"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tenants
+  labels:
+    name: tenants
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: cpu-mem-limit-range
+  namespace: tenants
+  labels:
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+spec:
+  limits:
+  - type: Container
+    defaultRequest:
+      cpu: "10m"
+      memory: "64Mi"
+    default:
+      cpu: "2"
+      memory: "2Gi"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hnc-system
+  labels:
+    name: hnc-system
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: cpu-mem-limit-range
+  namespace: hnc-system
+  labels:
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+spec:
+  limits:
+  - type: Container
+    defaultRequest:
+      cpu: "10m"
+      memory: "64Mi"
+    default:
+      cpu: "2"
+      memory: "2Gi"
