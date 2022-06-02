@@ -240,3 +240,11 @@ spec:
     default:
       cpu: "2"
       memory: "2Gi"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argo
+  labels:
+    name: argo
+    istio-injection: enabled
