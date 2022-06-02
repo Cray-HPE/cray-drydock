@@ -136,19 +136,17 @@ subjects:
   name: default
   namespace: services
 ---
-# Grants the default service account access to the default PSP for the argo
-# namespace, effectively making the default PSP for the argo namespace
-# privileged-psp.
-apiVersion: rbac.authorization.k8s.io/v1
+# RoleBinding for PSP in argo namespace
 kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: argo-default-psp
+  name: argo-psp
   namespace: argo
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: privileged-psp
 subjects:
-- kind: ServiceAccount
-  name: default
-  namespace: argo
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: system:serviceaccounts:argo
