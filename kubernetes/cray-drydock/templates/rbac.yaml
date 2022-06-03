@@ -33,6 +33,9 @@ subjects:
   - kind: ServiceAccount
     name: jobs-watcher
     namespace: services
+  - kind: ServiceAccount
+    name: jobs-watcher
+    namespace: argo
 roleRef:
   kind: ClusterRole
   name: jobs-watcher-cr
