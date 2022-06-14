@@ -30,9 +30,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: jobs-watcher-crb
 subjects:
-- kind: ServiceAccount
-  name: jobs-watcher
-  namespace: services
+  - kind: ServiceAccount
+    name: jobs-watcher
+    namespace: services
+  - kind: ServiceAccount
+    name: jobs-watcher
+    namespace: argo
 roleRef:
   kind: ClusterRole
   name: jobs-watcher-cr
@@ -49,9 +52,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: jobs-watcher-cr
 rules:
-- apiGroups: ["", "batch"]
-  resources: ["jobs"]
-  verbs: ["get", "list"]
+  - apiGroups: ["", "batch"]
+    resources: ["jobs"]
+    verbs: ["get", "list"]
 
 ---
 # RoleBinding for PSP in loftsman namespace
@@ -65,9 +68,9 @@ roleRef:
   kind: ClusterRole
   name: privileged-psp
 subjects:
-- apiGroup: rbac.authorization.k8s.io
-  kind: Group
-  name: system:serviceaccounts:loftsman
+  - apiGroup: rbac.authorization.k8s.io
+    kind: Group
+    name: system:serviceaccounts:loftsman
 ---
 # RoleBinding for PSP in operators namespace
 kind: RoleBinding
@@ -80,9 +83,9 @@ roleRef:
   kind: ClusterRole
   name: privileged-psp
 subjects:
-- apiGroup: rbac.authorization.k8s.io
-  kind: Group
-  name: system:serviceaccounts:operators
+  - apiGroup: rbac.authorization.k8s.io
+    kind: Group
+    name: system:serviceaccounts:operators
 ---
 # RoleBinding for PSP in istio-system namespace
 kind: RoleBinding
@@ -95,9 +98,9 @@ roleRef:
   kind: ClusterRole
   name: privileged-psp
 subjects:
-- apiGroup: rbac.authorization.k8s.io
-  kind: Group
-  name: system:serviceaccounts:istio-system
+  - apiGroup: rbac.authorization.k8s.io
+    kind: Group
+    name: system:serviceaccounts:istio-system
 ---
 # RoleBinding for PSP with jobs-watcher ServiceAccount in services namespace
 apiVersion: rbac.authorization.k8s.io/v1
@@ -110,12 +113,12 @@ roleRef:
   kind: ClusterRole
   name: privileged-psp
 subjects:
-- kind: ServiceAccount
-  name: sonar
-  namespace: services
-- kind: ServiceAccount
-  name: jobs-watcher
-  namespace: services
+  - kind: ServiceAccount
+    name: sonar
+    namespace: services
+  - kind: ServiceAccount
+    name: jobs-watcher
+    namespace: services
 ---
 # Grants the default service account access to the default PSP for the services
 # namespace, effectively making the default PSP for the services namespace
@@ -132,6 +135,27 @@ roleRef:
   kind: ClusterRole
   name: privileged-psp
 subjects:
-- kind: ServiceAccount
-  name: default
-  namespace: services
+  - kind: ServiceAccount
+    name: default
+    namespace: services
+---
+# RoleBinding for PSP in argo namespace
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: argo-psp
+  namespace: argo
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: privileged-psp
+subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: Group
+    name: system:serviceaccounts:argo
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: argo
+  name: jobs-watcher
