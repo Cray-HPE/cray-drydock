@@ -68,6 +68,12 @@ if kubectl get ns spire &> /dev/null; then
 else
   echo "Didn't find the spire namespace, not attempting to sync there"
 fi
+if kubectl get ns argo &> /dev/null; then
+  sync_item "secret/postgres-backup-s3-credentials" "default" "argo"
+  sync_item "secret/config-data-s3-credentials" "default" "argo"
+else
+  echo "Didn't find the argo namespace, not attempting to sync there"
+fi
 if kubectl get ns nexus &> /dev/null; then
   sync_item "configmap/cray-configmap-ca-public-key" "default" "nexus"
 else
