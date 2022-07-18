@@ -192,9 +192,59 @@ spec:
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: multi-tenancy
+  labels:
+    name: multi-tenancy
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: cpu-mem-limit-range
+  namespace: multi-tenancy
+  labels:
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+spec:
+  limits:
+  - type: Container
+    defaultRequest:
+      cpu: "10m"
+      memory: "64Mi"
+    default:
+      cpu: "2"
+      memory: "2Gi"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: tenants
   labels:
     name: tenants
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: cpu-mem-limit-range
+  namespace: tenants
+  labels:
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+spec:
+  limits:
+  - type: Container
+    defaultRequest:
+      cpu: "10m"
+      memory: "64Mi"
+    default:
+      cpu: "2"
+      memory: "2Gi"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tapms-operator
+  labels:
+    name: tapms-operator
     {{- include "cray-drydock.labels" . | nindent 4 }}
     istio-injection: enabled
 ---
@@ -202,7 +252,33 @@ apiVersion: v1
 kind: LimitRange
 metadata:
   name: cpu-mem-limit-range
-  namespace: tenants
+  namespace: tapms-operator
+  labels:
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+spec:
+  limits:
+  - type: Container
+    defaultRequest:
+      cpu: "10m"
+      memory: "64Mi"
+    default:
+      cpu: "2"
+      memory: "2Gi"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: slurm-operator
+  labels:
+    name: slurm-operator
+    {{- include "cray-drydock.labels" . | nindent 4 }}
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: cpu-mem-limit-range
+  namespace: slurm-operator
   labels:
     {{- include "cray-drydock.labels" . | nindent 4 }}
 spec:
