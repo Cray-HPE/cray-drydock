@@ -48,6 +48,7 @@ sonar:
     - nexus
     - spire
     - vault
+    - slurm-operator
   sync:
     schedule:
       minute: "*/1"
