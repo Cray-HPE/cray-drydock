@@ -108,16 +108,6 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: gatekeeper-system
-  labels:
-    name: gatekeeper-system
-    admission.gatekeeper.sh/ignore: no-self-managing
-    control-plane: controller-manager
-    gatekeeper.sh/system: "yes"
----
-apiVersion: v1
-kind: Namespace
-metadata:
   name: pki-operator
   labels:
     name: pki-operator
