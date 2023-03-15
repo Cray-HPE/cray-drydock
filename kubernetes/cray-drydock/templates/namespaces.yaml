@@ -256,3 +256,11 @@ metadata:
   labels:
     name: argo
     istio-injection: enabled
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dvs
+  labels:
+    name: dvs
+    istio-injection: enabled
