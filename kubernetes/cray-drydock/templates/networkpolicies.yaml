@@ -36,23 +36,26 @@ spec:
     - from:
       - namespaceSelector:
           matchLabels:
-            name: dvs
+            kubernetes.io/metadata.name: dvs
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: istio-system
   egress:
     - to:
       - namespaceSelector:
           matchLabels:
-            name: dvs
+            kubernetes.io/metadata.name: dvs
     - to:
       - namespaceSelector:
           matchLabels:
-            name: spire
-      - podSelector:
+            kubernetes.io/metadata.name: spire
+        podSelector:
           matchLabels:
             app.kubernetes.io/name: spire-jwks
     - to:
       - namespaceSelector:
           matchLabels:
-            name: spire
-      - podSelector:
+            kubernetes.io/metadata.name: spire
+        podSelector:
           matchLabels:
             app.kubernetes.io/name: cray-spire-jwks
