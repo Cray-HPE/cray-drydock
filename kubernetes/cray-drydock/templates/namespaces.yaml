@@ -254,3 +254,10 @@ metadata:
   labels:
     name: dvs
     istio-injection: enabled
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cert-manager
+  labels:
+    istio-injection: enabled
