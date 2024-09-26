@@ -26,6 +26,6 @@ FROM artifactory.algol60.net/docker.io/alpine AS crictl
 RUN wget https://arti.hpc.amslabs.hpecorp.net/artifactory/csm-internal-third-party-generic-local/cri-containerd-release/cri-containerd-1.3.4.linux-amd64.tar.gz
 RUN tar -xf cri-containerd-1.3.4.linux-amd64.tar.gz
 
-FROM artifactory.algol60.net/csm-docker/stable/docker-kubectl:1.19.15
+FROM artifactory.algol60.net/csm-docker/stable/docker-kubectl:1.24.17
 
 COPY --from=crictl usr/local/bin/crictl .
