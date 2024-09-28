@@ -25,4 +25,4 @@ FROM artifactory.algol60.net/csm-docker/stable/github.com/kubernetes-sigs/cri-to
 
 FROM artifactory.algol60.net/csm-docker/stable/docker-kubectl:1.24.17
 
-COPY --from=crictl usr/local/bin/crictl .
+COPY --from=crictl usr/bin/crictl .
