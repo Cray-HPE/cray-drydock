@@ -21,7 +21,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-FROM artifactory.algol60.net/csm-docker/stable/github.com/kubernetes-sigs/cri-tools AS crictl
+FROM artifactory.algol60.net/csm-docker/stable/github.com/kubernetes-sigs/cri-tools:v1.24.2 AS crictl
 
 FROM artifactory.algol60.net/csm-docker/stable/docker-kubectl:1.24.17
 
