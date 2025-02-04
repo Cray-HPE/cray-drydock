@@ -57,3 +57,10 @@ sonar:
       day_of_month: "*"
       month: "*"
       day_of_week: "*"
+    resources:
+      requests:
+        memory: "1Gi"
+        cpu: "2"
+      limits:
+        memory: "2Gi"
+        cpu: "6"
