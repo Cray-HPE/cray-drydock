@@ -50,13 +50,13 @@ spec:
               image: {{ .Values.kubectl.image.repository }}:{{ .Values.kubectl.image.tag }}
               imagePullPolicy: {{ .Values.kubectl.image.pullPolicy }}
               command: ["/bin/sonar-sync.sh"]
+              # We will guarantee that .Values.sonar.sync always exists in values.yaml, to avoid nesting multiple checks.
+              {{- if .Values.sonar.sync.resources }}
+              {{- with .Values.sonar.sync.resources }}
               resources:
-                requests:
-                  memory: "1Gi"
-                  cpu: "2"
-                limits:
-                  memory: "2Gi"
-                  cpu: "6"
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              {{- end }}
               volumeMounts:
                 - name: sonar-scripts
                   mountPath: /bin/sonar-sync.sh
