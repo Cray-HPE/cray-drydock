@@ -31,7 +31,6 @@ spec:
   podSelector: {}
   policyTypes:
     - Ingress
-    - Egress
   ingress:
     - from:
       - namespaceSelector:
@@ -40,22 +39,3 @@ spec:
       - namespaceSelector:
           matchLabels:
             kubernetes.io/metadata.name: istio-system
-  egress:
-    - to:
-      - namespaceSelector:
-          matchLabels:
-            kubernetes.io/metadata.name: dvs
-    - to:
-      - namespaceSelector:
-          matchLabels:
-            kubernetes.io/metadata.name: spire
-        podSelector:
-          matchLabels:
-            app.kubernetes.io/name: spire-jwks
-    - to:
-      - namespaceSelector:
-          matchLabels:
-            kubernetes.io/metadata.name: spire
-        podSelector:
-          matchLabels:
-            app.kubernetes.io/name: cray-spire-jwks
