@@ -1,7 +1,7 @@
 {{/*
 MIT License
 
-(C) Copyright 2022 Hewlett Packard Enterprise Development LP
+(C) Copyright 2022, 2025 Hewlett Packard Enterprise Development LP
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
@@ -47,6 +47,12 @@ metadata:
   namespace: services
   name: jobs-watcher
 ---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: argo
+  name: jobs-watcher
+---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -55,7 +61,7 @@ rules:
   - apiGroups: ["", "batch"]
     resources: ["jobs"]
     verbs: ["get", "list"]
-
+{{- if .Capabilities.APIVersions.Has "policy/v1beta1/PodSecurityPolicy" }}
 ---
 # RoleBinding for PSP in loftsman namespace
 kind: RoleBinding
@@ -154,12 +160,6 @@ subjects:
     kind: Group
     name: system:serviceaccounts:argo
 ---
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  namespace: argo
-  name: jobs-watcher
----
 # RoleBinding for PSP in cert-manager namespace
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -174,3 +174,4 @@ subjects:
   - apiGroup: rbac.authorization.k8s.io
     kind: Group
     name: system:serviceaccounts:cert-manager
+{{- end }}
